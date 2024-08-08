@@ -1,5 +1,6 @@
-Flask==2.2.3
-Werkzeug==2.2.3
-WeasyPrint==54.0
-Jinja2==3.1.2
-flasgger==0.9.5
+Flask==3.0.3
+Werkzeug==3.0.3
+WeasyPrint==62.3
+Jinja2==3.1.4
+flasgger==0.9.7.1
+python-dotenv==0.21.0
