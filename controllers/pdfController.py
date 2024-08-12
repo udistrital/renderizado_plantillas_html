@@ -4,8 +4,8 @@ import base64
 
 pdf_blueprint = Blueprint('pdf', __name__)
 
-@pdf_blueprint.route('/generarpdf', methods=['POST'])
-def generate_pdf():
+@pdf_blueprint.route('/pdf', methods=['POST'])
+def generar_pdf():
     """
     Genera un PDF a partir de un HTML.
     ---
@@ -25,9 +25,9 @@ def generate_pdf():
             css:
               type: string
               description: Optional CSS string.
-            context:
+            datos:
               type: object
-              description: Optional context for Jinja2 templating.
+              description: Optional datos for Jinja2 templating.
     responses:
       200:
         description: PDF generated successfully
@@ -57,20 +57,17 @@ def generate_pdf():
     """
     try:
         data = request.json
-        html_template = data.get('html')
+        plantilla_html = data.get('html')
         css = data.get('css', None)  # CSS es opcional
-        context = data.get('context', {})
+        datos = data.get('data', {})
         
-        if not html_template:
+        if not plantilla_html:
             raise ValueError("La plantilla HTML es requerida.")
         
-        pdf_file = renderizar_pdf(html_template, css, context)
+        pdf_file = renderizar_pdf(plantilla_html, css, datos)
 
-        # Leer el contenido del archivo PDF
-        pdf_content = pdf_file.read()
-        
         # Convertir el PDF a base64
-        pdf_base64 = base64.b64encode(pdf_content).decode('utf-8')
+        pdf_base64 = base64.b64encode(pdf_file).decode('utf-8')
         
         # Crear una respuesta JSON con el PDF en base64
         response_data = {
@@ -79,14 +76,10 @@ def generate_pdf():
             "Status": 200,
             "Data": pdf_base64
         }
-
         return jsonify(response_data)
 
     except Exception as e:
-        # Log the error (optional)
         print(f"Error: {e}")
-
-        # Create an error response
         error_response = {
             "Message": f"Ha ocurrido un error: {str(e)}",
             "Success": False,
