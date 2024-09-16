@@ -1,0 +1,112 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API para la generación de PDFs a partir de plantillas HTML.",
+    "version": "1.0.0",
+    "title": "PDF Generation API"
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "PDF Generation",
+      "description": "Operaciones relacionadas con la generación de PDF."
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/pdf": {
+      "post": {
+        "tags": [
+          "PDF Generation"
+        ],
+        "summary": "Genera un PDF a partir de un HTML.",
+        "description": "Este endpoint permite generar un archivo PDF utilizando una plantilla HTML y opcionalmente CSS y datos para templating con Jinja2.",
+        "operationId": "generarPDF",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Datos necesarios para generar el PDF.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "html": {
+                  "type": "string",
+                  "description": "Plantilla HTML en formato string."
+                },
+                "css": {
+                  "type": "string",
+                  "description": "CSS opcional en formato string."
+                },
+                "datos": {
+                  "type": "object",
+                  "description": "Datos opcionales para renderizar con Jinja2."
+                }
+              },
+              "required": [
+                "html"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF generado exitosamente.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Message": {
+                  "type": "string",
+                  "example": "PDF generado exitosamente"
+                },
+                "Success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "Status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "PDF": {
+                  "type": "string",
+                  "description": "Cadena en Base64 del archivo PDF generado.",
+                  "example": "JVBERi0xLjQKJcfsj6IK... (PDF en base64)"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al generar el PDF.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Message": {
+                  "type": "string",
+                  "example": "Ha ocurrido un error: descripción del error"
+                },
+                "Success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "Status": {
+                  "type": "integer",
+                  "example": 500
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
