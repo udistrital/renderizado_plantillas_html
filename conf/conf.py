@@ -5,6 +5,6 @@ class Config:
     # Carga las variables de entorno desde el archivo .env
     load_dotenv() 
 
-    RENDERIZADO_HTML_PORT = os.getenv('RENDERIZADO_HTML_PORT')
+    RENDERIZADO_HTML_PORT = os.getenv('RENDERIZADO_HTML_PORT', 8080)
 
 config = Config()
