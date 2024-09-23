@@ -3,4 +3,4 @@
 set -e
 set -u
 set -o pipefail
-python api.py
+python app.py
