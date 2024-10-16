@@ -1,20 +1,27 @@
-# Usar una imagen base de Python
-FROM python:3.9-slim
+FROM python:3.10
 
-# Establecer el directorio de trabajo
-WORKDIR /app
+RUN apt-get update
 
-# Copiar los archivos de requerimientos
+RUN pip install awscli
+
 COPY requirements.txt .
 
-# Instalar las dependencias
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
-# Copiar el resto de los archivos del proyecto
-COPY . .
+COPY conf/ /conf/
 
-# Exponer el puerto en el que se ejecutará la aplicación
-EXPOSE 5000
+COPY controllers/ /controllers/
 
-# Comando para ejecutar la aplicación
-CMD ["python", "app.py"]
+COPY services/ /services/
+
+COPY swagger/ /swagger/
+
+COPY entrypoint.sh entrypoint.sh
+
+ADD app.py .
+
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+
+EXPOSE 8080
