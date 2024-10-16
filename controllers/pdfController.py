@@ -4,6 +4,8 @@ import base64
 
 pdf_blueprint = Blueprint('pdf', __name__)
 
+
+
 @pdf_blueprint.route('/pdf', methods=['POST'])
 def generar_pdf():
     """
