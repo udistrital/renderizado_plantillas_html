@@ -2,11 +2,11 @@ from flask import Blueprint, request, jsonify
 from services.pdfService import renderizar_pdf
 import base64
 
-pdf_blueprint = Blueprint('pdf', __name__)
+pdf_blueprint = Blueprint('generar-pdf', __name__)
 
 
 
-@pdf_blueprint.route('/pdf', methods=['POST'])
+@pdf_blueprint.route('/generar-pdf', methods=['POST'])
 def generar_pdf():
     """
     Genera un PDF a partir de un HTML.
