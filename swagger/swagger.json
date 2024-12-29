@@ -17,7 +17,7 @@
     "http"
   ],
   "paths": {
-    "/pdf": {
+    "/generar-pdf": {
       "post": {
         "tags": [
           "PDF Generation"
@@ -47,6 +47,93 @@
                 "css": {
                   "type": "string",
                   "description": "CSS opcional en formato string."
+                },
+                "datos": {
+                  "type": "object",
+                  "description": "Datos opcionales para renderizar con Jinja2."
+                }
+              },
+              "required": [
+                "html"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF generado exitosamente.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Message": {
+                  "type": "string",
+                  "example": "PDF generado exitosamente"
+                },
+                "Success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "Status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "PDF": {
+                  "type": "string",
+                  "description": "Cadena en Base64 del archivo PDF generado.",
+                  "example": "JVBERi0xLjQKJcfsj6IK... (PDF en base64)"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al generar el PDF.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Message": {
+                  "type": "string",
+                  "example": "Ha ocurrido un error: descripción del error"
+                },
+                "Success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "Status": {
+                  "type": "integer",
+                  "example": 500
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generar-html": {
+      "post": {
+        "tags": [
+          "HTML Generation"
+        ],
+        "summary": "Renderiza un HTML a partir de un HTML y un JSON de datos.",
+        "description": "Este endpoint permite generar un archivo nuevo HTML utilizando una plantilla HTML y datos para templating con Jinja2.",
+        "operationId": "generarHTML",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Datos necesarios para generar el HTML.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "html": {
+                  "type": "string",
+                  "description": "Plantilla HTML en formato string."
                 },
                 "datos": {
                   "type": "object",

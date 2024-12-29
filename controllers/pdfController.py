@@ -111,7 +111,7 @@ def generar_html():
             html:
               type: string
               description: The HTML template string.
-            data:
+            datos:
               type: object
               description: Optional data for Jinja2 templating.
     responses:
@@ -144,7 +144,7 @@ def generar_html():
     try:
         data = request.json
         plantilla_html = data.get('html')
-        datos = data.get('data', {})
+        datos = data.get('datos', {})
 
         if not plantilla_html:
             raise ValueError("La plantilla HTML es requerida.")
