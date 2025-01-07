@@ -23,7 +23,7 @@ def generar_pdf():
           css:
             type: string
             description: Optional CSS string.
-          data:
+          datos:
             type: object
             description: Optional data for Jinja2 templating.
           html:
@@ -60,7 +60,7 @@ def generar_pdf():
     data = request.json
     plantilla_html = data.get('html')
     css = data.get('css', None)  # CSS es opcional
-    datos = data.get('data', {})
+    datos = data.get('datos', {})
     
     if not plantilla_html:
       raise ValueError("La plantilla HTML es requerida.")
@@ -103,7 +103,7 @@ def generar_html():
         required:
           - html
         properties:
-          data:
+          datos:
             type: object
             description: Optional data for Jinja2 templating.
           html:
@@ -139,7 +139,7 @@ def generar_html():
   try:
     data = request.json
     plantilla_html = data.get('html')
-    datos = data.get('data', {})
+    datos = data.get('datos', {})
 
     if not plantilla_html:
       raise ValueError("La plantilla HTML es requerida.")
