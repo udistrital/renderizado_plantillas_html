@@ -1,7 +1,6 @@
 from jinja2 import Template
 from weasyprint import HTML, CSS
 
-
 def renderizar_pdf(plantillaHTML, css=None, context={}):
     # htmlRenderizado = plantilla.render(context)
     htmlRenderizado = renderizar_html(plantillaHTML, context)
