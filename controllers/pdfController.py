@@ -24,7 +24,7 @@ def generar_pdf():
             css:
               type: string
               description: Optional CSS string.
-            datos:
+            data:
               type: object
               description: Optional data for Jinja2 templating.
             html:
@@ -61,7 +61,7 @@ def generar_pdf():
         data = request.json
         plantilla_html = data.get("html")
         css = data.get("css", None)  # CSS es opcional
-        datos = data.get("datos", {})
+        datos = data.get("data", {})
 
         if not plantilla_html:
             raise ValueError("La plantilla HTML es requerida.")
