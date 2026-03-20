@@ -1,10 +1,10 @@
 import os
-from dotenv import load_dotenv
+
 
 class Config:
-    # Carga las variables de entorno desde el archivo .env
-    load_dotenv() 
+    RENDERIZADO_HTML_PORT = int(os.getenv("RENDERIZADO_HTML_PORT", 8080))
+    ENV = os.getenv("ENV", "production")
+    DEBUG = ENV == "dev" or ENV == "development"
 
-    RENDERIZADO_HTML_PORT = os.getenv('RENDERIZADO_HTML_PORT', 8080)
 
 config = Config()
