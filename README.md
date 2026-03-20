@@ -1,34 +1,65 @@
+# Renderizado plantillas HTML
+
+ Servicio encargado de la generación de documentos PDF a partir de plantillas HTML y un objeto JSON con los datos a reemplazar utilizando el motor de renderizado WeasyPrint y Jinja2.
+
+
 ## Especificaciones Técnicas
 
 ### Tecnologías Implementadas y Versiones
-* [Python 3.12.4](https://github.com/udistrital/lineamientos_oas/blob/master/api_flask/lineamientos_previos.md)
-* [Flask 3.0.3](https://flask.palletsprojects.com/es/main/)
-* [Weasyprint 62.3](https://doc.courtbouillon.org/weasyprint/stable/)
-* [JINJA2 3.1.4](https://jinja.palletsprojects.com/en/3.1.x/)
-* [docker](https://docs.docker.com/engine/install/ubuntu/)
+* [Python 3.12 - Gestionado con uv](https://docs.astral.sh/uv/)
+* [Flask 3.1.3](https://flask.palletsprojects.com/en/stable/)
+* [Weasyprint 68.1](https://doc.courtbouillon.org/weasyprint/stable/)
+* [JINJA2 3.1.6](https://jinja.palletsprojects.com/en/stable/)
+* [Flasgger (Swagger UI)](https://github.com/flasgger/flasgger)
+* [Gunicorn](https://gunicorn.org/)
+* [Docker](https://docs.docker.com/engine/install/ubuntu/)
 
 
 ### Variables de Entorno
 
-RENDERIZADO_HTML_PORT=[puerto de ejecucion]
+RENDERIZADO_HTML_PORT=[Puerto de ejecución del servicio]
+ENV=[Entorno de ejecución (dev activa Swagger)]
 
-### Ejecución del Proyecto
-```shel
+### Ejecución del Proyecto (local con uv)
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/udistrital/renderizado_plantillas_html
+cd renderizado_plantillas_html
 
-# 1. Obtener el repositorio con Go
-go get github.com/udistrital/renderizado_plantillas_html
+# 2. Instalar dependencias (incluyendo desarrollo)
+uv sync
 
-# 2. Moverse a la carpeta del repositorio
-cd $GOPATH/src/github.com/udistrital/renderizado_plantillas_html
+# 3. Configurar variables de entorno (Linux/macOS)
+export ENV=dev
+export RENDERIZADO_HTML_PORT=8080
 
-# 3. Moverse a la rama **develop**
-git pull origin develop && git checkout develop
-
-# 4. alimentar todas las variables de entorno que utiliza el proyecto.
-
-# 5. ejecutar el proyecto
-python app.py
+# 4.1. Ejecutar en modo desarrollo
+uv run flask run --debug --port 8080
 ```
+
+### Ejecución del Proyecto (local con uv)
+```bash
+# 1. Construir la imagen
+docker build -t renderizado-html-pdf .
+
+# 2. Ejecutar el contenedor
+docker run -p 8080:8080 \
+  -e ENV=dev \
+  -e RENDERIZADO_HTML_PORT=8080 \
+  renderizado-html-pdf
+```
+
+### Estilo de Código y Calidad
+
+Se utiliza Ruff para el formateo y linting del código.
+
+```bash
+# Revisar errores de estilo
+uv run ruff check .
+# Formatear automáticamente
+uv run ruff format .
+```
+
 ## Estado CI
 
 | Develop | Relese 0.0.1 | Master |
@@ -37,7 +68,7 @@ python app.py
 
 ## Modelo de Datos
 
-No cuenta con modelo de datos
+No aplica
 
 ## Licencia
 
