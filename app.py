@@ -1,7 +1,6 @@
 import logging
 from flask import Flask, jsonify
 from controllers.pdfController import pdf_blueprint
-from swagger.swagger_config import configure_swagger
 from conf.conf import config
 
 logging.basicConfig(level=logging.INFO)
@@ -13,6 +12,7 @@ def create_app():
     app.config.from_object(config)
 
     if app.debug:
+        from swagger.swagger_config import configure_swagger
         configure_swagger(app)
 
     app.register_blueprint(pdf_blueprint)
