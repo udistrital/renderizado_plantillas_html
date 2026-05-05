@@ -1,6 +1,7 @@
 import logging
 from flask import Flask, jsonify
 from controllers.pdfController import pdf_blueprint
+from controllers.docxController import docx_blueprint
 from conf.conf import config
 
 logging.basicConfig(level=logging.INFO)
@@ -16,6 +17,7 @@ def create_app():
         configure_swagger(app)
 
     app.register_blueprint(pdf_blueprint)
+    app.register_blueprint(docx_blueprint)
 
     @app.route("/", methods=["GET"])
     def health_check():
