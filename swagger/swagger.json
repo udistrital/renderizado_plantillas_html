@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "PDF Generation API"
   },
-  "host": "localhost:5000",
+  "host": "localhost:8080",
   "basePath": "/",
   "tags": [
     {
@@ -17,182 +17,222 @@
     "http"
   ],
   "paths": {
-    "/generar-pdf": {
+    "/generar-docx": {
       "post": {
-        "tags": [
-          "PDF Generation"
-        ],
-        "summary": "Genera un PDF a partir de un HTML.",
-        "description": "Este endpoint permite generar un archivo PDF utilizando una plantilla HTML y opcionalmente CSS y datos para templating con Jinja2.",
-        "operationId": "generarPDF",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "Datos necesarios para generar el PDF.",
-            "required": true,
             "schema": {
-              "type": "object",
               "properties": {
-                "html": {
-                  "type": "string",
-                  "description": "Plantilla HTML en formato string."
-                },
                 "css": {
-                  "type": "string",
-                  "description": "CSS opcional en formato string."
+                  "description": "Optional CSS string.",
+                  "type": "string"
                 },
-                "datos": {
-                  "type": "object",
-                  "description": "Datos opcionales para renderizar con Jinja2."
+                "data": {
+                  "description": "Optional data for Jinja2 templating.",
+                  "type": "object"
+                },
+                "html": {
+                  "description": "The HTML template string.",
+                  "type": "string"
                 }
               },
               "required": [
                 "html"
-              ]
+              ],
+              "type": "object"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "PDF generado exitosamente.",
+            "description": "DOCX generated successfully",
             "schema": {
-              "type": "object",
               "properties": {
-                "Message": {
-                  "type": "string",
-                  "example": "PDF generado exitosamente"
+                "Data": {
+                  "description": "Base64 encoded DOCX string",
+                  "type": "string"
                 },
-                "Success": {
-                  "type": "boolean",
-                  "example": true
+                "Message": {
+                  "type": "string"
                 },
                 "Status": {
-                  "type": "integer",
-                  "example": 200
+                  "type": "integer"
                 },
-                "PDF": {
-                  "type": "string",
-                  "description": "Cadena en Base64 del archivo PDF generado.",
-                  "example": "JVBERi0xLjQKJcfsj6IK... (PDF en base64)"
+                "Success": {
+                  "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           },
           "500": {
-            "description": "Error al generar el PDF.",
+            "description": "Error generating DOCX",
             "schema": {
-              "type": "object",
               "properties": {
                 "Message": {
-                  "type": "string",
-                  "example": "Ha ocurrido un error: descripción del error"
-                },
-                "Success": {
-                  "type": "boolean",
-                  "example": false
+                  "type": "string"
                 },
                 "Status": {
-                  "type": "integer",
-                  "example": 500
+                  "type": "integer"
+                },
+                "Success": {
+                  "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           }
-        }
+        },
+        "summary": "Genera un DOCX a partir de un HTML.",
+        "tags": [
+          "DOCX Generation"
+        ]
       }
     },
     "/generar-html": {
       "post": {
-        "tags": [
-          "HTML Generation"
-        ],
-        "summary": "Renderiza un HTML a partir de un HTML y un JSON de datos.",
-        "description": "Este endpoint permite generar un archivo nuevo HTML utilizando una plantilla HTML y datos para templating con Jinja2.",
-        "operationId": "generarHTML",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "Datos necesarios para generar el HTML.",
-            "required": true,
             "schema": {
-              "type": "object",
               "properties": {
-                "html": {
-                  "type": "string",
-                  "description": "Plantilla HTML en formato string."
-                },
                 "datos": {
-                  "type": "object",
-                  "description": "Datos opcionales para renderizar con Jinja2."
+                  "description": "Optional data for Jinja2 templating.",
+                  "type": "object"
+                },
+                "html": {
+                  "description": "The HTML template string.",
+                  "type": "string"
                 }
               },
               "required": [
                 "html"
-              ]
+              ],
+              "type": "object"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "PDF generado exitosamente.",
+            "description": "HTML generated successfully",
             "schema": {
-              "type": "object",
               "properties": {
-                "Message": {
-                  "type": "string",
-                  "example": "PDF generado exitosamente"
+                "Data": {
+                  "description": "Rendered HTML with variables replaced",
+                  "type": "string"
                 },
-                "Success": {
-                  "type": "boolean",
-                  "example": true
+                "Message": {
+                  "type": "string"
                 },
                 "Status": {
-                  "type": "integer",
-                  "example": 200
+                  "type": "integer"
                 },
-                "PDF": {
-                  "type": "string",
-                  "description": "Cadena en Base64 del archivo PDF generado.",
-                  "example": "JVBERi0xLjQKJcfsj6IK... (PDF en base64)"
+                "Success": {
+                  "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           },
           "500": {
-            "description": "Error al generar el PDF.",
+            "description": "Error generating HTML",
             "schema": {
-              "type": "object",
               "properties": {
                 "Message": {
-                  "type": "string",
-                  "example": "Ha ocurrido un error: descripción del error"
-                },
-                "Success": {
-                  "type": "boolean",
-                  "example": false
+                  "type": "string"
                 },
                 "Status": {
-                  "type": "integer",
-                  "example": 500
+                  "type": "integer"
+                },
+                "Success": {
+                  "type": "boolean"
                 }
-              }
+              },
+              "type": "object"
             }
           }
-        }
+        },
+        "summary": "Genera un HTML a partir de un HTML.",
+        "tags": [
+          "HTML Generation"
+        ]
+      }
+    },
+    "/generar-pdf": {
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "css": {
+                  "description": "Optional CSS string.",
+                  "type": "string"
+                },
+                "data": {
+                  "description": "Optional data for Jinja2 templating.",
+                  "type": "object"
+                },
+                "html": {
+                  "description": "The HTML template string.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "html"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF generated successfully",
+            "schema": {
+              "properties": {
+                "Data": {
+                  "description": "Base64 encoded PDF string",
+                  "type": "string"
+                },
+                "Message": {
+                  "type": "string"
+                },
+                "Status": {
+                  "type": "integer"
+                },
+                "Success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "500": {
+            "description": "Error generating PDF",
+            "schema": {
+              "properties": {
+                "Message": {
+                  "type": "string"
+                },
+                "Status": {
+                  "type": "integer"
+                },
+                "Success": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+        "summary": "Genera un PDF a partir de un HTML.",
+        "tags": [
+          "PDF Generation"
+        ]
       }
     }
   }
