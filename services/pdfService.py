@@ -20,4 +20,14 @@ def renderizar_html(plantillaHTML, context={}):
     plantilla = Template(plantillaHTML)
 
     # Renderizar el HTML con el contexto
-    return plantilla.render(context)
+    html_final = plantilla.render(context)
+
+    # --- LIMPIEZA DE NON-BREAKING SPACES ---
+    # Reemplaza la entidad de texto '&nbsp;' por un espacio común
+    html_saneado = html_final.replace("&nbsp;", " ")
+    
+    # Reemplaza el carácter Unicode invisible No-Break Space (\xa0) por un espacio común
+    html_saneado = html_saneado.replace("\xa0", " ")
+    # ----------------------------------------
+
+    return html_saneado
