@@ -1,6 +1,12 @@
 from jinja2 import Template
 from weasyprint import HTML, CSS
 
+from .secureFetcherService import FetcherSeguro
+
+# Las plantillas son contenido no confiable: se restringen los recursos
+# externos que pueden resolver.
+fetcher = FetcherSeguro()
+
 
 def renderizar_pdf(plantillaHTML, css=None, context={}):
     # htmlRenderizado = plantilla.render(context)
@@ -8,10 +14,10 @@ def renderizar_pdf(plantillaHTML, css=None, context={}):
 
     # Renderizar el HTML y generar el PDF
     if css:
-        css_obj = CSS(string=css)
-        pdf = HTML(string=htmlRenderizado).write_pdf(stylesheets=[css_obj])
+        css_obj = CSS(string=css, url_fetcher=fetcher)
+        pdf = HTML(string=htmlRenderizado, url_fetcher=fetcher).write_pdf(stylesheets=[css_obj])
     else:
-        pdf = HTML(string=htmlRenderizado).write_pdf()
+        pdf = HTML(string=htmlRenderizado, url_fetcher=fetcher).write_pdf()
     return pdf
 
 
