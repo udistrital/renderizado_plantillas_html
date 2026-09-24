@@ -1,7 +1,10 @@
 #
 # 1. Build stage
 #
-FROM ghcr.io/astral-sh/uv:0.5-ubuntu24.04 AS builder
+FROM python:3.14-slim-bookworm AS builder
+
+# Copiar los binarios de uv directamente desde la imagen oficial
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -10,41 +13,44 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Instalar Python 3.14 y librerías de compilación usando uv
-RUN uv python install 3.14
-
+# Paquetes de compilación para CFFI / WeasyPrint
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    python3-dev \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Instalar dependencias del proyecto
 COPY pyproject.toml uv.lock ./
 
-RUN uv sync --python 3.14 --frozen --no-install-project --no-dev
+RUN uv sync --frozen --no-install-project --no-dev
 
 #
 # 2. Final stage
 #
-FROM ubuntu:24.04
+FROM python:3.14-slim-bookworm
 
 WORKDIR /app
 
+# Variables de entorno para Python y Flask
 ENV PORT=8080 \
     PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH"
 
+# Dependencias de ejecución para WeasyPrint, fuentes y gráficos
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpango-1.0-0 \
     libharfbuzz0b \
     libpangoft2-1.0-0 \
     libpangocairo-1.0-0 \
-    libgdk-pixbuf-2.0-0 \
+    libgdk-pixbuf2.0-0 \
     libffi8 \
     fonts-liberation \
     fontconfig \
     shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
 
+# Copiar entorno virtual generado en el builder
 COPY --from=builder /app/.venv /app/.venv
 
 COPY conf/ ./conf/
