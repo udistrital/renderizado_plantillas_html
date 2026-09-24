@@ -8,6 +8,7 @@ workspace:
       - master
 
 kind: pipeline
+type: docker
 name: oas_api_ci
 
 steps:
@@ -84,7 +85,7 @@ steps:
       SUFFIX=prod
       CLUSTER=oas
         ;;
-      *)
+      release/*)
       SUFFIX=test
       CLUSTER=test
         ;;
