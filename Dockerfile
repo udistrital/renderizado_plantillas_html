@@ -43,7 +43,7 @@ RUN apk add --no-cache \
     harfbuzz \
     gdk-pixbuf \
     libffi \
-    ttf-liberation \
+    ttf-dejavu \
     fontconfig \
     shared-mime-info \
     bash
