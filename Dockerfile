@@ -1,7 +1,7 @@
 #
 # 1. Build stage
 #
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
+FROM ghcr.io/astral-sh/uv:python3.12-alpine AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -10,14 +10,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Add libffi-dev to the cffi compilation (dependency WeasyPrint)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+# Paquetes de compilación para Alpine (cffi, WeasyPrint y librerías C)
+RUN apk add --no-cache \
+    build-base \
     python3-dev \
     libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
+    cairo-dev \
+    pango-dev \
+    gdk-pixbuf-dev
 
-# Install dependencies
+# Instalar dependencias del proyecto
 COPY pyproject.toml uv.lock ./
 
 RUN uv sync --frozen --no-install-project --no-dev
@@ -25,7 +27,7 @@ RUN uv sync --frozen --no-install-project --no-dev
 #
 # 2. Final stage
 #
-FROM python:3.12-slim-bookworm
+FROM python:3.12-alpine
 
 WORKDIR /app
 
@@ -34,19 +36,19 @@ ENV PORT=8080 \
     PYTHONUNBUFFERED=1 \
     PATH="/app/.venv/bin:$PATH"
 
-# Dependency WeasyPrint
-# Add libgdk-pixbuf2.0-0 to images support
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpango-1.0-0 \
-    libharfbuzz0b \
-    libpangoft2-1.0-0 \
-    libpangocairo-1.0-0 \
-    libgdk-pixbuf2.0-0 \
-    libffi8 \
-    fonts-liberation \
-    && rm -rf /var/lib/apt/lists/*
+# Librerías de ejecución para WeasyPrint, fuentes y utilidades
+RUN apk add --no-cache \
+    pango \
+    cairo \
+    harfbuzz \
+    gdk-pixbuf \
+    libffi \
+    font-liberation \
+    fontconfig \
+    shared-mime-info \
+    bash
 
-# Copy venv from the builder
+# Copiar entorno virtual generado en el builder
 COPY --from=builder /app/.venv /app/.venv
 
 COPY conf/ ./conf/
