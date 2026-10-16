@@ -140,7 +140,7 @@ def generar_html():
     try:
         data = request.json
         plantilla_html = data.get("html")
-        datos = data.get("datos", {})
+        datos = data.get("data", {})
 
         if not plantilla_html:
             raise ValueError("La plantilla HTML es requerida.")
