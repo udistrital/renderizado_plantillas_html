@@ -1,10 +1,15 @@
+ARG PYTHON_IMAGE=python:3.14-slim-trixie
+ARG UV_VERSION=0.12.17
+
+FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
+
 #
 # 1. Build stage
 #
-FROM python:3.14-slim-bookworm AS builder
+FROM ${PYTHON_IMAGE} AS builder
 
 # Copiar los binarios de uv directamente desde la imagen oficial
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=uv /uv /uvx /bin/
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -12,13 +17,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_LINK_MODE=copy
 
 WORKDIR /app
-
-# Paquetes de compilación para CFFI / WeasyPrint
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    python3-dev \
-    libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
 
 # Instalar dependencias del proyecto
 COPY pyproject.toml uv.lock ./
@@ -28,7 +26,7 @@ RUN uv sync --frozen --no-install-project --no-dev
 #
 # 2. Final stage
 #
-FROM python:3.14-slim-bookworm
+FROM ${PYTHON_IMAGE}
 
 WORKDIR /app
 
@@ -40,11 +38,11 @@ ENV PORT=8080 \
 # Dependencias de ejecución para WeasyPrint, fuentes y gráficos
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpango-1.0-0 \
-    libharfbuzz0b \
     libpangoft2-1.0-0 \
-    libpangocairo-1.0-0 \
-    libgdk-pixbuf2.0-0 \
+    libharfbuzz0b \
+    libharfbuzz-subset0 \
     libffi8 \
+    ca-certificates \
     fonts-liberation \
     fontconfig \
     shared-mime-info \
