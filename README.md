@@ -8,7 +8,7 @@
 ### Tecnologías Implementadas y Versiones
 * [Python 3.12 - Gestionado con uv](https://docs.astral.sh/uv/)
 * [Flask 3.1.3](https://flask.palletsprojects.com/en/stable/)
-* [Weasyprint 68.1](https://doc.courtbouillon.org/weasyprint/stable/)
+* [Weasyprint 70.0](https://doc.courtbouillon.org/weasyprint/stable/)
 * [JINJA2 3.1.6](https://jinja.palletsprojects.com/en/stable/)
 * [Flasgger (Swagger UI)](https://github.com/flasgger/flasgger)
 * [Gunicorn](https://gunicorn.org/)
